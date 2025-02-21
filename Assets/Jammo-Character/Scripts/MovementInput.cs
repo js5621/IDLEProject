@@ -1,7 +1,9 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 //This script requires you to have setup your animator with 3 parameters, "InputMagnitude", "InputX", "InputZ"
 //With a blend tree to control the inputmagnitude and allow blending between animations.
@@ -13,13 +15,17 @@ public class MovementInput : MonoBehaviour {
 
 	public float InputX;
 	public float InputZ;
+	public float InputY;
 	public Vector3 desiredMoveDirection;
 	public bool blockRotationPlayer;
 	public float desiredRotationSpeed = 0.1f;
 	public Animator anim;
 	public float Speed;
 	public float allowPlayerRotation = 0.1f;
-	public Camera cam;
+	public float jumpForce = 2.0f;
+	public float jumpHeight = 100.0f;
+    public float gravityValue = -9.8f;
+    public Camera cam;
 	public CharacterController controller;
 	public bool isGrounded;
 
@@ -32,15 +38,16 @@ public class MovementInput : MonoBehaviour {
     public float StartAnimTime = 0.3f;
     [Range(0, 1f)]
     public float StopAnimTime = 0.15f;
-
+    [SerializeField] private float gravityMultiplier = 3.0f;
     public float verticalVel;
     private Vector3 moveVector;
-
+	
 	// Use this for initialization
 	void Start () {
 		anim = this.GetComponent<Animator> ();
 		cam = Camera.main;
 		controller = this.GetComponent<CharacterController> ();
+		
 	}
 	
 	// Update is called once per frame
@@ -48,22 +55,31 @@ public class MovementInput : MonoBehaviour {
 		InputMagnitude ();
 
         isGrounded = controller.isGrounded;
-        if (isGrounded)
+		  
+		if (isGrounded && verticalVel<0.0f )
         {
-            verticalVel -= 0;
+			verticalVel = -1.0f;
         }
         else
         {
-            verticalVel -= 1;
+			verticalVel += gravityValue * gravityMultiplier * Time.deltaTime;
         }
-        moveVector = new Vector3(0, verticalVel * .2f * Time.deltaTime, 0);
-        controller.Move(moveVector);
 
-		PlayerMoveAndRotation();
+		if(Input.GetKeyDown(KeyCode.X))
+		{
+			Jump();
+		}
+
+        moveVector = new Vector3(0, verticalVel * .2f * Time.deltaTime, 0);
+        
+
+        controller.Move(moveVector);
     }
 
+    
     void PlayerMoveAndRotation() {
 		InputX = Input.GetAxis ("Horizontal");
+		
 		InputZ = Input.GetAxis ("Vertical");
 
 		var camera = Camera.main;
@@ -104,21 +120,36 @@ public class MovementInput : MonoBehaviour {
 	void InputMagnitude() {
 		//Calculate Input Vectors
 		InputX = Input.GetAxis ("Horizontal");
+
 		InputZ = Input.GetAxis ("Vertical");
+		
+        //anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
+        //anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
 
-		//anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
-		//anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
-
-		//Calculate the Input Magnitude
-		Speed = new Vector2(InputX, InputZ).sqrMagnitude;
-
+        //Calculate the Input Magnitude
+        Speed = new Vector2(InputX, InputZ).sqrMagnitude;
+		
         //Physically move player
+       
 
-		if (Speed > allowPlayerRotation) {
+        if (Speed > allowPlayerRotation) {
 			anim.SetFloat ("Blend", Speed, StartAnimTime, Time.deltaTime);
+			
 			PlayerMoveAndRotation ();
 		} else if (Speed < allowPlayerRotation) {
 			anim.SetFloat ("Blend", Speed, StopAnimTime, Time.deltaTime);
 		}
 	}
+
+	public void Jump()
+	{
+		
+
+		verticalVel += jumpForce;
+	}
+
+	private bool IsGrounded() => isGrounded;
+
+
+
 }

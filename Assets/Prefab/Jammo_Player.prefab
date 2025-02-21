@@ -3468,6 +3468,7 @@ GameObject:
   - component: {fileID: 2980162056716413479}
   - component: {fileID: 4194179071348992017}
   - component: {fileID: 4341760230385335952}
+  - component: {fileID: -2052892456422196349}
   m_Layer: 0
   m_Name: Jammo_Player
   m_TagString: Untagged
@@ -3607,6 +3608,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   Speed: 0
   allowPlayerRotation: 0.1
+  jumpForce: 0.3
   cam: {fileID: 0}
   controller: {fileID: 0}
   isGrounded: 0
@@ -3615,6 +3617,33 @@ MonoBehaviour:
   StartAnimTime: 0.3
   StopAnimTime: 0.15
   verticalVel: -0.5
+--- !u!54 &-2052892456422196349
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5085183786342946368}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5275081187762877463
 GameObject:
   m_ObjectHideFlags: 0
