@@ -2634,7 +2634,7 @@ Transform:
   m_GameObject: {fileID: 3693634182145166216}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.01, z: 0}
   m_LocalScale: {x: 28, y: 28, z: 28}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3466,12 +3466,14 @@ GameObject:
   - component: {fileID: 1376792447687256647}
   - component: {fileID: 1337145540605002959}
   - component: {fileID: 2980162056716413479}
+  - component: {fileID: 8123053811799672466}
   - component: {fileID: 4194179071348992017}
+  - component: {fileID: 7714362605807691312}
+  - component: {fileID: 4951437287713001640}
   - component: {fileID: 4341760230385335952}
-  - component: {fileID: -2052892456422196349}
   m_Layer: 0
   m_Name: Jammo_Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3564,6 +3566,18 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.98, z: 0}
+--- !u!114 &8123053811799672466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5085183786342946368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978c72569a7ed1042a6a034c83546869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4194179071348992017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3587,7 +3601,19 @@ MonoBehaviour:
   - {r: 0.72790754, g: 2, b: 0.26178014, a: 1}
   - {r: 2, g: 0.87978274, b: 0.26178014, a: 1}
   eyeState: 0
---- !u!114 &4341760230385335952
+--- !u!114 &7714362605807691312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5085183786342946368}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8733eea4d10b94eb3e76ae4c6a3b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4951437287713001640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3596,12 +3622,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 5085183786342946368}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f36be5f3fcabb43438303288ac2bd522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Velocity: 20
+  InputX: 0
+  InputZ: 0
+  speed: 10
+  jumpSpeedF: 15
+  gravity: -9.8
+  allowPlayerRotation: 0.1
+  desiredRotationSpeed: 0.3
+  desiredMoveDirection: {x: 0, y: 0, z: 0}
+  Speed: 0
+  cam: {fileID: 0}
+  blockRotationPlayer: 0
+  playerSo: {fileID: 0}
+--- !u!114 &4341760230385335952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5085183786342946368}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: caa9f165e2b4f1a4f9522501717c095d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Velocity: 10
   InputX: 0
   InputZ: 0
+  InputY: 0
   desiredMoveDirection: {x: 0, y: 0, z: 0}
   blockRotationPlayer: 0
   desiredRotationSpeed: 0.3
@@ -3609,41 +3661,17 @@ MonoBehaviour:
   Speed: 0
   allowPlayerRotation: 0.1
   jumpForce: 0.3
+  jumpHeight: 100
+  gravityValue: -9.8
   cam: {fileID: 0}
   controller: {fileID: 0}
-  isGrounded: 0
+  isGrounded: 1
   HorizontalAnimSmoothTime: 0.223
   VerticalAnimTime: 0.2
   StartAnimTime: 0.3
   StopAnimTime: 0.15
-  verticalVel: -0.5
---- !u!54 &-2052892456422196349
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5085183786342946368}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  gravityMultiplier: 3
+  verticalVel: 0.5
 --- !u!1 &5275081187762877463
 GameObject:
   m_ObjectHideFlags: 0

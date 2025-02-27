@@ -1,20 +1,41 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
+using System.Net;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using Random = UnityEngine.Random;
 
 public class Monster : Charcter
 {
     public float monster_speed;
    // Animator enemyAnimator;
     public float rate =0.5f;
+    public PlayerSo playerSo;
+    bool isRandomMove =false;
+    bool isAlive = true;
+    bool isUniComplete =false;
     MovementInput jammoLocation;
+    Spawner monsterSpawner;
+    public SpawnSO spawnSo;
+    Rigidbody alienRigid;
+    CancellationTokenSource destroyCancellation = new CancellationTokenSource();
     Vector3 playerVector;
+
+    private RaycastHit hit; 
+    private float maxDistance = 10f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-     void Start()
+    async void Start()
     {
-        jammoLocation= GameObject.Find("Jammo_Player").GetComponent<MovementInput>();    
+        jammoLocation= GameObject.Find("Jammo_Player").GetComponent<MovementInput>();
+        monsterSpawner =GameObject.FindAnyObjectByType<Spawner>();
+        alienRigid = GetComponent<Rigidbody>();
+        
         //enemyAnimator = GetComponent<Animator>();   
     }
+
+
 
     public void MonsterSample()
     {
@@ -22,41 +43,101 @@ public class Monster : Charcter
     }
 
     // Update is called once per frame
-    void Update()
+    async void Update()
     {
-        playerVector = jammoLocation.transform.position;    
+        playerVector = jammoLocation.transform.position;
         //transform.LookAt(playerVector);
-      
 
-        float targer_distance = Vector3.Distance(transform.position, playerVector);
-        if (targer_distance <= rate)// 간격 거리와 가까워지면 이동 중지
+
+
+        if (monsterSpawner.isMonsterMove)
         {
-            monster_speed = 0.0f;
-           // SetMotionChange("isMove", false);
+            if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance))
+            {
+
+                transform.position = Vector3.MoveTowards(transform.position, playerVector, Time.deltaTime * monster_speed);
+            }
+            else
+            {
+
+               // await EnemyMoveSequence().SuppressCancellationThrow(); 
+            }
+
+
+
         }
-        
-        else //일반적인 경우에는 움직임을 진행
+        if (monsterSpawner.isMonsterSequenceEnd)
         {
-            //영점 기준으로 시선변경
-            transform.position = Vector3.MoveTowards(transform.position, playerVector, Time.deltaTime * monster_speed);
-            //영점으로, 몬스터의 속도만큼 앞으로 이동합니다.
-            //SetMotionChange("isMove", true);
+            Destroy(this.gameObject, 0.5f);
         }
 
-        
+
+
+
+
     }
+
+    private async void FixedUpdate()
+    {
+       
+    }
+
+    async UniTask EnemyMoveSequence()
+    {
+        if (!isAlive)
+            return;
+        else
+        {
+            try
+            {
+                isUniComplete = false;
+                if(alienRigid != null)
+                    alienRigid.AddForce(Vector3.forward + (Vector3)Random.insideUnitCircle, ForceMode.Impulse);
+                await UniTask.Delay(100);
+                if(alienRigid != null)
+                    alienRigid.AddForce(Vector3.back + (Vector3)Random.insideUnitCircle, ForceMode.Impulse);
+                await UniTask.Delay(100);
+                isUniComplete = true;
+
+            }
+
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+            
+            finally
+            {
+              
+            }
+        }
+
+     
+    }
+
+    
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag =="Environment")
+
+     
+        if (collision.gameObject.tag =="Player")
         {
-            Destroy(this.gameObject);   
+            if (playerSo.playerHp >0)
+            {
+                playerSo.playerHp -= 1;
+            }
+            if(spawnSo.SpawnMonsterCount > 0)
+            {
+                spawnSo.SpawnMonsterCount -= 1;
+            }
+            isAlive =false;
+        
+            Destroy(this.gameObject, 0.5f);
+            
+            
         }
     }
-    //protected void SetMotionChange(string motion_name, bool param)
-    //{
-    //    enemyAnimator.SetBool(motion_name, param);
-
-    //}
+    
 
 }

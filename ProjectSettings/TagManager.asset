@@ -7,11 +7,12 @@ TagManager:
   - PlayerEyes
   - EnemyAlien
   - Environment
+  - Light
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - 
