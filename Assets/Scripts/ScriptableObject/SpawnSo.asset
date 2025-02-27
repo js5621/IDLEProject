@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54dac5c055a4e1f4b8969d5b32a8a1dd, type: 3}
   m_Name: SpawnSo
   m_EditorClassIdentifier: 
-  SpawnMonsterCount: 0
+  recentPoint: 0
+  GoalPoint: 30

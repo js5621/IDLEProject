@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c791d5611230d34f9b8b6567159bfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monster_speed: 5
+  monster_speed: 3.5
   rate: 0
   playerSo: {fileID: 11400000, guid: beb96128030bedb4fb5f8c71cf560076, type: 2}
   spawnSo: {fileID: 11400000, guid: 05fdbf37415820a44ae89181aed0c3c9, type: 2}

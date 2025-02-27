@@ -23,16 +23,16 @@ public class Monster : Charcter
     CancellationTokenSource destroyCancellation = new CancellationTokenSource();
     Vector3 playerVector;
 
-    private RaycastHit hit; 
-    private float maxDistance = 10f;
+    private RaycastHit hit;
+    private float maxDistance = 6f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
         jammoLocation= GameObject.Find("Jammo_Player").GetComponent<MovementInput>();
         monsterSpawner =GameObject.FindAnyObjectByType<Spawner>();
         alienRigid = GetComponent<Rigidbody>();
-        
-        //enemyAnimator = GetComponent<Animator>();   
+
+        //enemyAnimator = GetComponent<Animator>();
     }
 
 
@@ -60,7 +60,7 @@ public class Monster : Charcter
             else
             {
 
-               // await EnemyMoveSequence().SuppressCancellationThrow(); 
+                await EnemyMoveSequence().SuppressCancellationThrow();
             }
 
 
@@ -79,7 +79,7 @@ public class Monster : Charcter
 
     private async void FixedUpdate()
     {
-       
+
     }
 
     async UniTask EnemyMoveSequence()
@@ -105,39 +105,40 @@ public class Monster : Charcter
             {
                 Debug.LogException(ex);
             }
-            
+
             finally
             {
-              
+
             }
         }
 
-     
+
     }
 
-    
+
 
     private void OnCollisionEnter(Collision collision)
     {
-
-     
-        if (collision.gameObject.tag =="Player")
+        if(monsterSpawner.isMonsterMove)
         {
-            if (playerSo.playerHp >0)
+            if (collision.gameObject.tag == "Player")
             {
-                playerSo.playerHp -= 1;
+                if (playerSo.playerHp > 0)
+                {
+                    playerSo.playerHp -= 1;
+                }
+
+                isAlive = false;
+
+                Destroy(this.gameObject, 0.5f);
+
+
             }
-            if(spawnSo.SpawnMonsterCount > 0)
-            {
-                spawnSo.SpawnMonsterCount -= 1;
-            }
-            isAlive =false;
-        
-            Destroy(this.gameObject, 0.5f);
-            
-            
+
+
         }
+
     }
-    
+
 
 }
