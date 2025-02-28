@@ -35,7 +35,7 @@ public class Player2 : MonoBehaviour
         MoveDir = Vector3.zero;
         controller = GetComponent<CharacterController>();
         playerAnimator = GetComponent<Animator>();
-        playerSo.playerHp = 10;
+        playerSo.playerHp = 15;
         playerSo.playerStage = 1;   
     }
 

@@ -50,6 +50,20 @@ public class Monster : Charcter
 
 
 
+        
+        if (monsterSpawner.isMonsterSequenceEnd)
+        {
+            Destroy(this.gameObject, 0.5f);
+        }
+
+
+
+
+
+    }
+
+    private async void FixedUpdate()
+    {
         if (monsterSpawner.isMonsterMove)
         {
             if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance))
@@ -66,20 +80,6 @@ public class Monster : Charcter
 
 
         }
-        if (monsterSpawner.isMonsterSequenceEnd)
-        {
-            Destroy(this.gameObject, 0.5f);
-        }
-
-
-
-
-
-    }
-
-    private async void FixedUpdate()
-    {
-
     }
 
     async UniTask EnemyMoveSequence()

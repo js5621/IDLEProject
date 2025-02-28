@@ -30,6 +30,9 @@ public class Spawner : MonoBehaviour
     public static List<Player> player_list = new List<Player>();//생성된 캐릭터
     public GameObject monsterSpawnText;
     public GameObject successOrFailText;
+    public GameObject commissionText;
+    public GameObject retryButton;
+    public GameObject gotoGameMenuButton;
 
     public bool isSpawnControl= false;
     public bool isgameOVer =false;
@@ -76,6 +79,8 @@ public class Spawner : MonoBehaviour
 
         successOrFailText.SetActive(true);
         successOrFailText.GetComponent<Text>().text = $"F A I L\nSCORE\n{spawnSO.recentPoint}";
+        retryButton.SetActive(true);
+        gotoGameMenuButton.SetActive(true); 
 
 
     }
@@ -91,10 +96,10 @@ public class Spawner : MonoBehaviour
         await UniTask.Delay(1000);
         isMonsterSequenceEnd = false;
         await UniTask.Delay(100);
-        successOrFailText.SetActive(true);
-        successOrFailText.GetComponent<Text>().text = "ALIEN\nAPPEAR!";
+        commissionText.SetActive(true);
+        commissionText.GetComponent<Text>().text = "ALIEN\nAPPEAR!";
         await UniTask.Delay(1000);
-        successOrFailText.SetActive(false);
+        commissionText.SetActive(false);
         await UniTask.Delay(1000);
 
         tempVector = spawnTransform.position;
@@ -110,21 +115,25 @@ public class Spawner : MonoBehaviour
             await UniTask.Delay(100);
         }
 
-        await UniTask.Delay(500);
-
-        successOrFailText.GetComponent<Text>().text = "Survive!";
         await UniTask.Delay(1000);
-        successOrFailText.SetActive(true);
+
+        commissionText.GetComponent<Text>().text = "Survive!";
         await UniTask.Delay(1000);
-        successOrFailText.SetActive(false);
+        commissionText.SetActive(true);
+        await UniTask.Delay(1000);
+        commissionText.SetActive(false);
 
 
 
 
 
-        await UniTask.Delay(100);
+        await UniTask.Delay(1000);
         isSpawnControl = true;
-        monsterSpawnText.SetActive(true);
+        if(monsterSpawnText != null)
+        {
+            monsterSpawnText.SetActive(true);
+        }
+        
 
         for (int i = 3; i > 0; i--)
         {
@@ -144,64 +153,56 @@ public class Spawner : MonoBehaviour
 
 
         // 준비 시퀀스 끝
+
+
         await UniTask.Delay((int)monster_spawn_time*secondToMili);
         if (playerSo.playerHp == 0)
         {
             return;
         }
-        monsterSpawnText.SetActive(true);
-        for (int i = 10; i > 0; i--)
+        else
         {
-            monsterSpawnText.GetComponent<Text>().text = i.ToString();
+            monsterSpawnText.SetActive(true);
+            for (int i = 10; i > 0; i--)
+            {
+                if (playerSo.playerHp == 0)
+                {
+                    monsterSpawnText.SetActive(false);
+                    return;
+                }
+                monsterSpawnText.GetComponent<Text>().text = i.ToString();
+                await UniTask.Delay(1000);
+            }
+            monsterSpawnText.SetActive(false);
+
+
+
+            successOrFailText.GetComponent<Text>().text = "SUCESS";
+            isMonsterMove = false;
+            await UniTask.Delay(200);
+
+            successOrFailText.SetActive(true);
+            isMonsterSequenceEnd = true;
             await UniTask.Delay(1000);
+            successOrFailText.SetActive(false);
+            isSpawnControl = false;
+
+            monster_count++;
+            playerSo.playerStage++;
+            isGamePlay = false;
+
+            MonsterSpawn();
         }
-        monsterSpawnText.SetActive(false);
-
-
-
-
-        successOrFailText.GetComponent<Text>().text = "SUCESS";
-        isMonsterMove = false;
-        await UniTask.Delay(200);
-        isMonsterSequenceEnd = true;
-        await UniTask.Delay(1000);
-        successOrFailText.SetActive(false);
-        isSpawnControl = false;
-
-        monster_count++;
-        playerSo.playerStage++;
-        isGamePlay = false;
 
 
 
 
 
         // 클리어 판정
-        successOrFailText.SetActive(true) ;
 
-        MonsterSpawn();
-    }
-    IEnumerator SpawnMonster()
-    {
 
-        tempVector = spawnTransform.position;
-        Vector3 pos;
-        for (int i = 0; i < monster_count; i++)
-        {
-            pos = tempVector + Random.insideUnitSphere * Random.Range(0.0f, summon_rate)+new Vector3(1,1,1)*0.2f;
-            pos.y = 2;
-            /*
-            while(Vector3.Distance(pos,playerTransform.position)<= re_Rate)
-            {
-                pos = Vector3.zero + Random.insideUnitSphere * summon_rate;
-                pos.y = 0.0f;
-            }
-            */
-            GameObject go =Instantiate(monster_prefab,pos,Quaternion.identity);
-        }
-        yield return new WaitForSeconds(monster_spawn_time);
-        StartCoroutine("SpawnMonster");
     }
+    
 
 }
 
